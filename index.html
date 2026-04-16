@@ -1,1 +1,203 @@
-<style>@page{size:A4;margin:20mm;background-color:#fff}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#333;line-height:1.6;margin:0;padding:0}.header{background-color:#2c3e50;color:#fff;padding:20px;text-align:center;border-bottom:5px solid #e67e22}h1{margin:0;font-size:22pt}h2{color:#2c3e50;border-left:5px solid #e67e22;padding-left:10px;margin-top:30px;font-size:16pt}h3{color:#d35400;font-size:13pt}.content{padding:10px 0}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{border:1px solid #ddd;padding:10px;text-align:left}th{background-color:#f2f2f2;color:#2c3e50}.warning{background-color:#fff3cd;border:1px solid #ffeeba;padding:15px;border-radius:5px;margin:20px 0}.step-box{background-color:#f9f9f9;border:1px solid #eee;padding:15px;margin-bottom:10px}.footer{text-align:center;font-size:9pt;color:#777;margin-top:50px;border-top:1px solid #eee;padding-top:10px}</style><div class="header"><h1>Panduan Wiring: DIY Bench Power Supply</h1><p>Modifikasi PSU ATX Komputer ke Adjustable Output</p></div><div class="content"><h2>1. Daftar Output Target</h2><p>Proyek ini menghasilkan 4 jalur output utama dari PSU ATX:</p><ul><li><strong>3.3V (Fixed):</strong> Kabel Oranye</li><li><strong>5V (Fixed):</strong> Kabel Merah</li><li><strong>12V (Fixed):</strong> Kabel Kuning</li><li><strong>Adjustable (Variable):</strong> Output dari Buck Converter (Input 12V)</li></ul><h2>2. Skema Wiring Utama (Deskripsi Teknis)</h2><h3>A. Power On PSU</h3><div class="step-box">Sambungkan kabel <strong>Hijau (PS_ON)</strong> ke kabel <strong>Hitam (GND)</strong> melalui saklar toggle untuk menyalakan/mematikan PSU.</div><h3>B. Koneksi Buck Converter &amp; Proteksi</h3><table><tbody><tr><th>Titik Koneksi</th><th>Tujuan / Jalur</th><th>Keterangan</th></tr><tr><td>Input (+) Buck</td><td>Kuning (+12V) PSU</td><td>Sumber daya utama modul</td></tr><tr><td>Input (-) Buck</td><td>Hitam (GND) PSU</td><td>Ground input</td></tr><tr><td>Output (+) Buck</td><td>Fuse (Sekring)</td><td>Proteksi arus berlebih</td></tr><tr><td>Setelah Fuse</td><td>Binding Post Merah</td><td>Output Positif Variabel</td></tr></tbody></table><h3>C. Koneksi Volt-Ampere Meter (V-A Meter)</h3><p>Wiring menggunakan metode <em>Common Ground</em>:</p><div class="step-box"><strong>Socket 3-Pin (Power &amp; Sensing):</strong><ul><li><strong>Merah Tipis:</strong> Ke kabel <strong>Merah (+5V)</strong> PSU (Display power).</li><li><strong>Kuning Tipis:</strong> Ke <strong>Binding Post Merah</strong> (Sensing tegangan output).</li><li><strong>Hitam Tipis:</strong> <em>Tidak dipakai / NC</em> (Sudah common ground).</li></ul></div><div class="step-box"><strong>Socket 2-Pin (Arus/Shunt):</strong><ul><li><strong>Hitam Tebal:</strong> Ke <strong>Output (-) Buck Converter</strong>.</li><li><strong>Merah Tebal:</strong> Ke <strong>Binding Post Hitam</strong> (Output Negatif Variabel).</li></ul></div><h2>3. Catatan Keamanan &amp; Perawatan</h2><div class="warning"><strong>PENTING:</strong><ol><li><strong>Beban Dummy:</strong> Jika tegangan 12V tidak stabil, beri beban (resistor 10 Ohm 10W) pada jalur 5V.</li><li><strong>Isolasi:</strong> Gunakan <em>Heat Shrink</em> pada semua sambungan solder untuk menghindari korsleting dengan casing metal.</li><li><strong>Fuse:</strong> Pilih nilai fuse sedikit di bawah arus maksimal Buck Converter (misal: Buck 5A, gunakan fuse 4A).</li><li><strong>Grounding:</strong> Pastikan kabel hitam tebal yang digunakan untuk jalur arus cukup besar agar tidak panas saat beban tinggi.</li></ol></div></div><div class="footer">Dokumen ini disusun berdasarkan spesifikasi pengguna untuk kebutuhan edukasi rakitan elektronika.</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bench Power Supply Wiring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-bottom: 5px solid #e67e22;
+        }
+        h1 { margin: 0; font-size: 22pt; }
+        h2 { color: #2c3e50; border-left: 5px solid #e67e22; padding-left: 10px; margin-top: 30px; font-size: 16pt; }
+        h3 { color: #d35400; font-size: 13pt; }
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        ul {
+            margin-left: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 5px solid #ffc107;
+            border-radius: 5px;
+        }
+        .toggle {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+        }
+        button.active {
+            background: #2c3e50;
+        }
+        .lang {
+            display: none;
+        }
+        .lang.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="toggle">
+    <button id="btn-id" class="active" onclick="setLang('id')">Bahasa Indonesia</button>
+    <button id="btn-en" onclick="setLang('en')">English</button>
+</div>
+
+<!-- INDONESIA -->
+<div id="id" class="lang active">
+    <div class="header">
+        <h1>Panduan Wiring: DIY Bench Power Supply</h1>
+        <p>Modifikasi PSU ATX Komputer ke Adjustable Output</p>
+    </div>
+
+    <h1>Diagram Skema Wiring Bench Power Supply</h1>
+
+    <div class="section">
+        <h2>1. Jalur Power & Standby</h2>
+        <ul>
+            <li><strong>PS_ON (Hijau):</strong> Ke saklar → GND.</li>
+            <li><strong>PWR_OK (Abu):</strong> LED + resistor 220Ω → GND.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Output Tetap</h2>
+        <ul>
+            <li>3.3V → Oranye → Terminal Merah #1</li>
+            <li>5V → Merah → Terminal Merah #2</li>
+            <li>12V → Kuning → Terminal Merah #3</li>
+            <li>GND → Hitam → Terminal Hitam</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Output Variabel</h2>
+        <table>
+            <tr><th>Dari</th><th>Ke</th><th>Catatan</th></tr>
+            <tr><td>PSU +12V</td><td>Buck +</td><td>Kuning</td></tr>
+            <tr><td>PSU GND</td><td>Buck -</td><td>Hitam</td></tr>
+            <tr><td>PSU +5V</td><td>Power Meter</td><td>Merah Tipis</td></tr>
+            <tr><td>Buck +</td><td>Fuse</td><td>5A</td></tr>
+            <tr><td>Fuse</td><td>Output +</td><td>Sensing</td></tr>
+            <tr><td>Buck -</td><td>Shunt Meter</td><td>Hitam Tebal</td></tr>
+            <tr><td>Meter Out</td><td>Output -</td><td>Merah Tebal</td></tr>
+        </table>
+    </div>
+
+    <div class="section note">
+        <h2>PENTING!</h2>
+        <ol>
+            <li><strong>Beban Dummy:</strong> Jika tegangan 12V tidak stabil, beri beban (resistor 10 Ohm 10W) pada jalur 5V.</li>
+            <li><strong>Isolasi:</strong> Gunakan <em>Heat Shrink</em> pada semua sambungan solder untuk menghindari korsleting dengan casing metal.</li>
+            <li><strong>Fuse:</strong> Pilih nilai fuse sedikit di bawah arus maksimal Buck Converter (misal: Buck 5A, gunakan fuse 4A).</li>
+            <li><strong>Grounding:</strong> Pastikan kabel hitam tebal yang digunakan untuk jalur arus cukup besar agar tidak panas saat beban tinggi.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ENGLISH -->
+<div id="en" class="lang">
+
+    <div class="header">
+        <h1>Wiring Guide: DIY Bench Power Supply</h1>
+        <p>Modifying a Computer ATX PSU to Adjustable Output</p>
+    </div>
+
+    <h1>Bench Power Supply Wiring Diagram</h1>
+
+    <div class="section">
+        <h2>1. Power & Standby (Mandatory)</h2>
+        <ul>
+            <li><strong>PS_ON (Green):</strong> Connect to toggle switch → GND.</li>
+            <li><strong>PWR_OK (Gray):</strong> LED + 220Ω resistor → GND.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Fixed Outputs</h2>
+        <ul>
+            <li>3.3V → Orange → Red Binding Post #1</li>
+            <li>5V → Red → Red Binding Post #2</li>
+            <li>12V → Yellow → Red Binding Post #3</li>
+            <li>GND → Black wires → Main Black Binding Post</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Adjustable Output</h2>
+        <table>
+            <tr><th>From</th><th>To</th><th>Notes</th></tr>
+            <tr><td>PSU +12V</td><td>Buck +</td><td>Yellow</td></tr>
+            <tr><td>PSU GND</td><td>Buck -</td><td>Black</td></tr>
+            <tr><td>PSU +5V</td><td>Meter Power</td><td>Thin Red</td></tr>
+            <tr><td>Buck +</td><td>Fuse</td><td>5A</td></tr>
+            <tr><td>Fuse</td><td>Output +</td><td>Sensing wire</td></tr>
+            <tr><td>Buck -</td><td>Meter Shunt In</td><td>Thick Black</td></tr>
+            <tr><td>Meter Out</td><td>Output -</td><td>Thick Red</td></tr>
+        </table>
+    </div>
+
+    <div class="section note">
+        <h2>Important Notes</h2>
+        <ol>
+            <li><strong>Dummy Load:</strong> If the 12V voltage is unstable, add a load (10 Ohm 10W resistor) to the 5V line.</li>
+            <li><strong>Insulation:</strong> Use Heat Shrink on all solder joints to prevent shorting with the metal casing.</li>
+            <li><strong>Fuse:</strong> Select a fuse rating slightly below the maximum current of the Buck Converter (e.g., if you want to buck 5A, use a 4A fuse).</li>
+            <li><strong>Grounding:</strong> Make sure the thick black wire used for the current path is large enough to prevent overheating under high loads.</li>
+        </ol>
+    </div>
+</div>
+
+<script>
+function setLang(lang) {
+    document.getElementById('en').classList.remove('active');
+    document.getElementById('id').classList.remove('active');
+    document.getElementById('btn-en').classList.remove('active');
+    document.getElementById('btn-id').classList.remove('active');
+
+    document.getElementById(lang).classList.add('active');
+    document.getElementById('btn-' + lang).classList.add('active');
+}
+</script>
+
+</body>
+</html>
